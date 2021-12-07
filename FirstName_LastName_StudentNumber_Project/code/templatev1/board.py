@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QFrame
 from PyQt5.QtCore import Qt, QBasicTimer, pyqtSignal, QPoint, QRectF, QRect, QEvent
 from PyQt5.QtGui import QPainter, QPen, QBrush, QMouseEvent
 from piece import Piece
-from game_logic import tryPlacePiece
+from game_logic import GameLogic
 
 class Board(QFrame):  # base the board on a QFrame widget
 	updateTimerSignal = pyqtSignal(int) # signal sent when timer is updated
@@ -93,7 +93,7 @@ class Board(QFrame):  # base the board on a QFrame widget
 		}
 		print(tileClicked)
 		if tileClicked["x"] in range(0,self.boardWidth) and tileClicked["y"] in range(0,self.boardHeight):
-			tryPlacePiece(self.boardArray, tileClicked["x"], tileClicked["y"])
+			GameLogic.tryPlacePiece(self.boardArray, tileClicked["x"], tileClicked["y"])
 		self.clickLocationSignal.emit(clickLoc)
 		self.update()
 
