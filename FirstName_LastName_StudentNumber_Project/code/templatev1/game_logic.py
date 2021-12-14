@@ -6,6 +6,11 @@ class GameLogic:
 	print("Game Logic Object Created")
 
 	def tryPlacePiece(gameBoard, x, y):
+		if x-1 >= 0 and gameBoard[x-1][y] != Piece.NoPiece:
+			return True
+		if x+1 < len(gameBoard) and gameBoard[x+1][y] != Piece.NoPiece:
+			return True
+		return False
 		gameBoard[x][y] = Piece.Black
 
 	def parseFile(file, count):

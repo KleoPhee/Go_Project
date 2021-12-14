@@ -8,6 +8,7 @@ from game_logic import GameLogic
 class Board(QFrame):  # base the board on a QFrame widget
 	updateTimerSignal = pyqtSignal(int) # signal sent when timer is updated
 	clickLocationSignal = pyqtSignal(str) # signal sent when there is a new click location
+	newMoveSignal = pyqtSignal(int, int) # signal sent when a player played
 
 	timer: QBasicTimer
 	isStarted: bool
@@ -94,7 +95,7 @@ class Board(QFrame):  # base the board on a QFrame widget
 		print(tileClicked)
 		if tileClicked["x"] in range(0,self.boardWidth) and tileClicked["y"] in range(0,self.boardHeight):
 			GameLogic.tryPlacePiece(self.boardArray, tileClicked["x"], tileClicked["y"])
-		self.clickLocationSignal.emit(clickLoc)
+		self.newMoveSignal.emit(tileClicked["x"],tileClicked["y"])
 		self.update()
 
 	def resetGame(self):
@@ -105,7 +106,10 @@ class Board(QFrame):  # base the board on a QFrame widget
 		"""tries to move a piece"""
 
 	def drawBoardSquares(self, painter):
-		"""draw all the square on the board"""
+		"""
+		Draw all the square on the board
+		:param QPainter painter: The painter used for this frame
+		"""
 		tileSize = {"x":self.size().width() / (self.boardWidth+1),"y":self.size().height() / (self.boardHeight+1)}
 		painter.setPen(QPen(QBrush(Qt.black), 5, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
 		for row in range(0, Board.boardHeight):
@@ -119,7 +123,10 @@ class Board(QFrame):  # base the board on a QFrame widget
 					)
 
 	def drawPieces(self, painter: QPainter):
-		"""draw the prices on the board"""
+		"""
+		Draw the pieces on the board
+		:param QPainter painter: The painter used for this frame
+		"""
 		tileSize = {"x": self.size().width() / (self.boardWidth+1), "y": self.size().height() / (self.boardHeight+1)}
 		radiusX = tileSize["x"] / 2.0
 		radiusY = tileSize["y"] / 2.0

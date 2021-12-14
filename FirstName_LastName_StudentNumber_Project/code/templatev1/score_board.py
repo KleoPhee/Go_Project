@@ -24,7 +24,6 @@ class ScoreBoard(QDockWidget):
 		self.mainLayout.addWidget(self.label_clickLocation)
 		self.mainLayout.addWidget(self.label_timeRemaining)
 		self.setWidget(self.mainWidget)
-		self.show()
 
 	def center(self):
 		'''centers the window on the screen, you do not need to implement this method'''
