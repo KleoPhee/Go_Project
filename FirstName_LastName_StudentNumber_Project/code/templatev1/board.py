@@ -98,16 +98,10 @@ class Board(QFrame):  # base the board on a QFrame widget
 			"x": int(event.x() / tileSize["x"] - 0.5),
 		  	"y": int(event.y() / tileSize["y"] - 0.5)
 		}
-		print(tileClicked)
 		if tileClicked["x"] in range(0,self.boardWidth) and tileClicked["y"] in range(0,self.boardHeight):
-			self.gameLogic.tryPlacePiece(self.boardArray, tileClicked["x"], tileClicked["y"])
-			# get moveData from gameLogic
-			moveData = {'player':1,'tile':{'x':tileClicked['x'],'y':tileClicked['y']},
-						'takenPieces':[
-							{'x': tileClicked['x']+1, 'y': tileClicked['y']},
-							{'x': tileClicked['x']+1, 'y': tileClicked['y']+1}
-						]}
-			self.newMoveSignal.emit(moveData)
+			historyEntry = self.gameLogic.tryPlacePiece(self.boardArray, tileClicked["x"], tileClicked["y"])
+			if historyEntry is not None:
+				self.newMoveSignal.emit(historyEntry)
 		self.update()
 
 	def resetGame(self):
