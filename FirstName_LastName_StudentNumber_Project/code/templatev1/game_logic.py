@@ -9,6 +9,7 @@ class GameLogic:
 	listHistoric = []
 
 	def tryPlacePiece(self, gameBoard, x, y):
+		listTurn = []
 		if self.checkLiberties(gameBoard, x, y) is True:
 			opponentPiece = self.colorTurn
 			self.colorTurn = Piece.Black if self.colorTurn is Piece.White else Piece.White
@@ -21,13 +22,15 @@ class GameLogic:
 				traceback = []
 				if x + i in range(0, len(gameBoard)) and gameBoard[x+i][y] == opponentPiece and self.takePieces(gameBoard, x + i, y, traceback, opponentPiece):
 					for toRemove in traceback:
+						listTurn.append(toRemove)
 						gameBoard[toRemove['x']][toRemove['y']] = Piece.NoPiece
 				traceback = []
 				if y + i in range(0, len(gameBoard)) and gameBoard[x][y+i] == opponentPiece and self.takePieces(gameBoard, x, y + i, traceback, opponentPiece):
 					for toRemove in traceback:
+						listTurn.append(toRemove)
 						gameBoard[toRemove['x']][toRemove['y']] = Piece.NoPiece
 
-			return {'player':self.colorTurn, 'tile':{'x':x, 'y':y},'takenPieces':[]} #voir pour append and for pr piece rm
+			return {'player':self.colorTurn, 'tile':{'x':x, 'y':y},'takenPieces':listTurn} #voir pour append and for pr piece rm
 		return None
 
 		#print content of gameboard inside file of folder name numero state + colorTurn at the begining
