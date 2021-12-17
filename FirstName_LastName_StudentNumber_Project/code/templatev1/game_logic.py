@@ -15,15 +15,18 @@ class GameLogic:
 			gameBoard[x][y] = self.colorTurn
 			self.nbTurn = self.nbTurn + 1
 			self.writeInFile(self.nbTurn, gameBoard, self.colorTurn)
+
+			# remove taken pieces
 			for i in range(-1, 2, 2):
 				traceback = []
-				if self.takePieces(gameBoard, x + i, y, traceback, opponentPiece):
+				if x + i in range(0, len(gameBoard)) and gameBoard[x+i][y] == opponentPiece and self.takePieces(gameBoard, x + i, y, traceback, opponentPiece):
 					for toRemove in traceback:
 						gameBoard[toRemove['x']][toRemove['y']] = Piece.NoPiece
 				traceback = []
-				if self.takePieces(gameBoard, x, y + i, traceback, opponentPiece):
+				if y + i in range(0, len(gameBoard)) and gameBoard[x][y+i] == opponentPiece and self.takePieces(gameBoard, x, y + i, traceback, opponentPiece):
 					for toRemove in traceback:
 						gameBoard[toRemove['x']][toRemove['y']] = Piece.NoPiece
+
 			return {'player':self.colorTurn, 'tile':{'x':x, 'y':y},'takenPieces':[]} #voir pour append and for pr piece rm
 		return None
 
@@ -32,13 +35,15 @@ class GameLogic:
 	def takePieces(self, gameBoard, x, y, traceback, opponentPiece):
 		if gameBoard[x][y] == Piece.NoPiece:
 			return False
+		if gameBoard[x][y] == self.colorTurn:
+			return True
 		traceback.append({'x': x, 'y': y})
 		for i in range(-1, 2, 2):
 			if x + i in range(0, len(gameBoard)) and {'x': x + i, 'y': y} not in traceback:
-				if gameBoard[x+i][y] == opponentPiece and not self.takePieces(gameBoard, x + i, y, traceback, opponentPiece):
+				if not self.takePieces(gameBoard, x + i, y, traceback, opponentPiece):
 					return False
 			if y + i in range(0, len(gameBoard[0])) and {'x': x, 'y': y + i} not in traceback:
-				if gameBoard[x][y+i] == opponentPiece and not self.takePieces(gameBoard, x, y + i, traceback, opponentPiece):
+				if not self.takePieces(gameBoard, x, y + i, traceback, opponentPiece):
 					return False
 		return True
 
