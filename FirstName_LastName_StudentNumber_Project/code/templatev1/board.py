@@ -25,6 +25,7 @@ class Board(QFrame):  # base the board on a QFrame widget
 		super().__init__(parent)
 		self.gameLogic = GameLogic()
 		self.initBoard()
+		self.gameLogic = GameLogic()
 		self.setStyleSheet('background:rgb(200,200,200);padding:7px')
 
 	def initBoard(self):
@@ -45,7 +46,12 @@ class Board(QFrame):  # base the board on a QFrame widget
 	def printBoardArray(self):
 		"""prints the boardArray in an attractive way"""
 		print("boardArray:")
-		print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in self.boardArray]))
+		outline = ""
+		for x in range(0, len(self.boardArray)):
+			for y in range(0, len(self.boardArray[x])):
+				outline += str(self.boardArray[x][y])
+			outline += "\n"
+		#print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in self.boardArray]))
 
 	def mousePosToColRow(self, event):
 		"""convert the mouse click event to a row and column"""

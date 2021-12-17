@@ -4,9 +4,49 @@ from FirstName_LastName_StudentNumber_Project.code.templatev1.piece import Piece
 
 class GameLogic:
 	print("Game Logic Object Created")
+	colorTurn = Piece.Black
+	nbTurn = 0
+	listHistoric = []
 
 	def tryPlacePiece(self, gameBoard, x, y):
-		gameBoard[x][y] = Piece.Black
+		if self.checkLiberties(gameBoard, x, y) is True:
+			self.colorTurn = Piece.Black if self.colorTurn is Piece.White else Piece.White
+			gameBoard[x][y] = self.colorTurn
+			self.nbTurn = self.nbTurn + 1
+			self.writeInFile(self.nbTurn, gameBoard, self.colorTurn)
+			return {'player':self.colorTurn, 'tile':{'x':x, 'y':y},'takenPieces':[]} #voir pour append and for pr piece rm
+		return None
+
+		#print content of gameboard inside file of folder name numero state + colorTurn at the begining
+
+	def takePieces(self, gameBoard, x, y):
+		if (gameBoard[x][y])
+
+	def writeInFile(self, nb, gameBoard, colorTurn):
+		f = open("state"+str(nb)+".txt", 'w+')
+		f.write("Color turn:" + str(colorTurn) + "\nBoard:\n" + '\n'.join(['\t'.join([str(cell) for cell in row]) for row in gameBoard]))
+		f.close()
+
+	# TODO 1. Suicide Rule: You cannot place a stone which will immediately have no liberties.
+	def checkLiberties(self, gameBoard, x, y):
+		if gameBoard[x][y] != Piece.NoPiece:
+			return False
+		else:
+			if x - 1 >= 0 and gameBoard[x - 1][y] == Piece.NoPiece:
+				return True
+			if x + 1 < len(gameBoard) and gameBoard[x + 1][y] == Piece.NoPiece:
+				return True
+			if y + 1 < len(gameBoard) and gameBoard[x][y+1] == Piece.NoPiece:
+				return True
+			if y - 1 >= 0 and gameBoard[x][y-1] == Piece.NoPiece:
+				return True
+		return False
+
+	# TODO 2. KO Rule (Eternity Rule):
+	def KoRule(self):
+		return
+
+# count the number of black and white tiles
 
 	def parseFile(file, count):
 		with open(file) as f:
@@ -30,8 +70,7 @@ class GameLogic:
 
 	# TODO vérifier les regle selectionner et adapter le jeu
 	# movement black first white second
-	# TODO 1. Suicide Rule: You cannot place a stone which will immediately have no liberties.
-	# TODO 2. KO Rule (Eternity Rule):
+
 	# Previous game states are not allowed. Keep a list of previous game states which must be
 	# checked before stones are placed
 	# techniquement peu pas les enlever préciser dans le help considerer comme aditionelle 10 marks
