@@ -8,7 +8,7 @@ from game_logic import GameLogic
 class Board(QFrame):  # base the board on a QFrame widget
 	updateTimerSignal = pyqtSignal(int) # signal sent when timer is updated
 	clickLocationSignal = pyqtSignal(str) # signal sent when there is a new click location
-	newMoveSignal = pyqtSignal(int, int) # signal sent when a player played
+	newMoveSignal = pyqtSignal(dict) # signal sent when a player played
 
 	timer: QBasicTimer
 	isStarted: bool
@@ -23,6 +23,7 @@ class Board(QFrame):  # base the board on a QFrame widget
 
 	def __init__(self, parent):
 		super().__init__(parent)
+		self.gameLogic = GameLogic()
 		self.initBoard()
 		self.setStyleSheet('background:rgb(200,200,200);padding:7px')
 
@@ -87,15 +88,20 @@ class Board(QFrame):  # base the board on a QFrame widget
 		"""this event is automatically called when the mouse is pressed"""
 		tileSize = {"x": self.size().width() / (self.boardWidth + 1),
 					"y": self.size().height() / (self.boardHeight + 1)}
-		clickLoc = "click location ["+str(event.x())+","+str(event.y())+"]"
 		tileClicked = {
 			"x": int(event.x() / tileSize["x"] - 0.5),
 		  	"y": int(event.y() / tileSize["y"] - 0.5)
 		}
 		print(tileClicked)
 		if tileClicked["x"] in range(0,self.boardWidth) and tileClicked["y"] in range(0,self.boardHeight):
-			GameLogic.tryPlacePiece(self.boardArray, tileClicked["x"], tileClicked["y"])
-		self.newMoveSignal.emit(tileClicked["x"],tileClicked["y"])
+			self.gameLogic.tryPlacePiece(self.boardArray, tileClicked["x"], tileClicked["y"])
+			# get moveData from gameLogic
+			moveData = {'player':1,'tile':{'x':tileClicked['x'],'y':tileClicked['y']},
+						'takenPieces':[
+							{'x': tileClicked['x']+1, 'y': tileClicked['y']},
+							{'x': tileClicked['x']+1, 'y': tileClicked['y']+1}
+						]}
+			self.newMoveSignal.emit(moveData)
 		self.update()
 
 	def resetGame(self):
@@ -121,6 +127,15 @@ class Board(QFrame):  # base the board on a QFrame widget
 						tileSize["x"],
 						tileSize["y"])
 					)
+				if row == (self.boardHeight-1) / 2 and col == (self.boardWidth-1) / 2:
+					painter.setBrush(QBrush(Qt.black, Qt.SolidPattern))
+					painter.setPen(QPen(QBrush(Qt.black), 2, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
+					center = QPoint(
+						tileSize["x"]*col + tileSize["x"],
+						tileSize["y"]*row + tileSize["y"]
+					)
+					painter.drawEllipse(center, tileSize["x"]*0.05, tileSize["y"]*0.05)
+					painter.setBrush(QBrush(Qt.transparent, Qt.SolidPattern))
 
 	def drawPieces(self, painter: QPainter):
 		"""

@@ -31,9 +31,17 @@ class HistoricWidget(QDockWidget):
 		# when the updateTimerSignal is emitted in the board the setTimeRemaining slot receives it
 		board.newMoveSignal.connect(self.addPlay)
 
-	@pyqtSlot(int, int)
-	def addPlay(self, row: int, col: int):
+	@pyqtSlot(dict)
+	def addPlay(self, play: dict):
 		"""
 		Add a new move to the historic
 		"""
-		self.historicListView.addItem(QListWidgetItem("Played in "+chr(65+col)+str(row+1)))
+		self.historicListView.addItem(QListWidgetItem(self.buildHistoricEntry(play)))
+
+	def buildHistoricEntry(self, play: dict):
+		historicEntry = 'Played in ' + chr(65 + play['tile']['x']) + str(play['tile']['y'] + 1)
+		if len(play['takenPieces']) > 0:
+			historicEntry += '\nThe following pieces have been removed:'
+			for i in range(0,len(play['takenPieces'])):
+				historicEntry += '\n   - ' + chr(65 + play['takenPieces'][i]['x']) + str(play['takenPieces'][i]['y'] + 1)
+		return historicEntry

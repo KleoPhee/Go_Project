@@ -2,7 +2,6 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow, QDesktopWidget, QMenu, QAction
 from PyQt5.QtCore import Qt
 from board import Board
-from score_board import ScoreBoard
 from SettingsWidget import SettingsWidget
 from HistoricWidget import HistoricWidget
 from HowToPlayDialog import HowToPlayDialog
@@ -11,9 +10,11 @@ from AboutDialog import AboutDialog
 class Go(QMainWindow):
 
 	board: Board
-	scoreBoard: ScoreBoard
+	historicViewAction: QAction
 	historicWidget: HistoricWidget
+	settingsViewAction: QAction
 	settingsWidget: SettingsWidget
+
 	def __init__(self):
 		super().__init__()
 		self.initUI()
@@ -31,11 +32,12 @@ class Go(QMainWindow):
 		fileMenu.setDisabled(True)
 
 		viewMenu = self.menuBar().addMenu(" View")
-		settingsViewAction = QAction(QIcon("./assets/icons/manual.png"), "Settings", self)
-		settingsViewAction.setDisabled(True)
-		viewMenu.addAction(settingsViewAction)
-		historicViewAction = QAction(QIcon("./assets/icons/manual.png"), "Historic", self)
-		viewMenu.addAction(historicViewAction)
+		self.settingsViewAction = QAction(QIcon("./assets/icons/ticked.png"), "Settings", self)
+		self.settingsViewAction.triggered.connect(self.toggleSettings)
+		viewMenu.addAction(self.settingsViewAction)
+		self.historicViewAction = QAction(QIcon("./assets/icons/ticked.png"), "Historic", self)
+		self.historicViewAction.triggered.connect(self.toggleHistoric)
+		viewMenu.addAction(self.historicViewAction)
 
 		helpMenu = self.menuBar().addMenu(" Help")
 		howToPlayAction = QAction(QIcon("./assets/icons/manual.png"), "How to play", self)
@@ -51,18 +53,16 @@ class Go(QMainWindow):
 		self.initMenu()
 		self.board = Board(self)
 		self.setCentralWidget(self.board)
-		self.scoreBoard = ScoreBoard()
 		self.historicWidget = HistoricWidget()
 		self.settingsWidget = SettingsWidget()
-		self.addDockWidget(Qt.BottomDockWidgetArea, self.scoreBoard)
-		self.addDockWidget(Qt.RightDockWidgetArea, self.settingsWidget)
+		self.addDockWidget(Qt.LeftDockWidgetArea, self.settingsWidget)
 		self.addDockWidget(Qt.LeftDockWidgetArea, self.historicWidget)
-		self.scoreBoard.make_connection(self.board)
 		self.historicWidget.make_connection(self.board)
 
 		self.resize(800, 800)
 		self.center()
 		self.setWindowTitle('Go')
+		self.setWindowIcon(QIcon('./assets/icons/Go.png'))
 		self.show()
 
 	def center(self):
@@ -78,3 +78,12 @@ class Go(QMainWindow):
 	def about(self):
 		aboutDialog = AboutDialog()
 		aboutDialog.show()
+
+	def toggleSettings(self):
+		currentState = self.settingsViewAction.isIconVisibleInMenu()
+		self.settingsViewAction.setIconVisibleInMenu(not currentState)
+		self.settingsWidget.hide() if currentState else self.settingsWidget.show()
+	def toggleHistoric(self):
+		currentState = self.historicViewAction.isIconVisibleInMenu()
+		self.historicViewAction.setIconVisibleInMenu(not currentState)
+		self.historicWidget.hide() if currentState else self.historicWidget.show()
