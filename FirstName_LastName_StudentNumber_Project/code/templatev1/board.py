@@ -1,5 +1,5 @@
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QFrame
+from PyQt5.QtWidgets import QFrame, QDialog
 from PyQt5.QtCore import Qt, QBasicTimer, pyqtSignal, QPoint, QRectF, QRect, QEvent, pyqtSlot
 from PyQt5.QtGui import QPainter, QPen, QBrush, QMouseEvent
 from piece import Piece
@@ -162,4 +162,7 @@ class Board(QFrame):  # base the board on a QFrame widget
 	def passTurn(self):
 		historicEntry, gameOver = self.gameLogic.passTurn()
 		self.newMoveSignal.emit(historicEntry)
-		print(gameOver)
+		if gameOver:
+			end = QDialog(self)
+			end.setWindowTitle("End of the GO game")
+			end.exec()

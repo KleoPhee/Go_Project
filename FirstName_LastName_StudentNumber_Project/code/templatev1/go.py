@@ -74,11 +74,11 @@ class Go(QMainWindow):
 
 	def howToPlay(self):
 		howToPlayDialog = HowToPlayDialog()
-		howToPlayDialog.show()
+		howToPlayDialog.exec()
 
 	def about(self):
 		aboutDialog = AboutDialog()
-		aboutDialog.show()
+		aboutDialog.exec()
 
 	def toggleSettings(self):
 		currentState = self.settingsViewAction.isIconVisibleInMenu()
