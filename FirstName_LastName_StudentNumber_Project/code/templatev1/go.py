@@ -58,6 +58,7 @@ class Go(QMainWindow):
 		self.addDockWidget(Qt.LeftDockWidgetArea, self.settingsWidget)
 		self.addDockWidget(Qt.LeftDockWidgetArea, self.historicWidget)
 		self.historicWidget.make_connection(self.board)
+		self.settingsWidget.make_connection(self.board)
 
 		self.resize(800, 800)
 		self.center()
@@ -87,3 +88,4 @@ class Go(QMainWindow):
 		currentState = self.historicViewAction.isIconVisibleInMenu()
 		self.historicViewAction.setIconVisibleInMenu(not currentState)
 		self.historicWidget.hide() if currentState else self.historicWidget.show()
+

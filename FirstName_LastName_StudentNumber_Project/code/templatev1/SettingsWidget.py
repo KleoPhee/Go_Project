@@ -1,8 +1,9 @@
-from PyQt5.QtCore import pyqtSlot, Qt
-from PyQt5.QtWidgets import QDockWidget, QWidget, QVBoxLayout, QCheckBox, QComboBox, QLabel, QHBoxLayout
-
+from PyQt5.QtCore import pyqtSlot, Qt, pyqtSignal
+from PyQt5.QtWidgets import QDockWidget, QWidget, QVBoxLayout, QCheckBox, QComboBox, QLabel, QHBoxLayout, QPushButton
+from board import Board
 
 class SettingsWidget(QDockWidget):
+	passTurnSignal = pyqtSignal()
 
 	def __init__(self):
 		"""
@@ -22,6 +23,11 @@ class SettingsWidget(QDockWidget):
 		mainLayout.addWidget(boardSizeControllerWidget)
 		mainLayout.addWidget(KORuleToggle)
 		mainLayout.addWidget(displayPossibilitiesToggle)
+
+		passTurnButton = QPushButton('Pass turn')
+		passTurnButton.clicked.connect(lambda: self.passTurnSignal.emit())
+		mainLayout.addWidget(passTurnButton)
+
 		mainLayout.setAlignment(Qt.AlignTop)
 		mainWidget.setLayout(mainLayout)
 		self.setWidget(mainWidget)
@@ -40,6 +46,9 @@ class SettingsWidget(QDockWidget):
 		boardSizeLayout.addWidget(boardSizeLabel)
 		boardSizeLayout.addWidget(boardSizeController)
 		return boardSizeControllerWidget
+
+	def make_connection(self, board: Board):
+		self.passTurnSignal.connect(board.passTurn)
 
 	@pyqtSlot()
 	def gameStarted(self):

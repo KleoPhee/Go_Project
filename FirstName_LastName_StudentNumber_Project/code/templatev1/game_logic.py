@@ -7,12 +7,13 @@ class GameLogic:
 	colorTurn = Piece.Black
 	nbTurn = 0
 	listHistoric = []
+	passCounts = 0
 
 	def tryPlacePiece(self, gameBoard, x, y):
 		listTurn = []
 		if self.checkLiberties(gameBoard, x, y) is True:
-			opponentPiece = self.colorTurn
-			self.colorTurn = Piece.Black if self.colorTurn is Piece.White else Piece.White
+			self.passCounts = 0
+			opponentPiece = Piece.Black if self.colorTurn is Piece.White else Piece.White
 			gameBoard[x][y] = self.colorTurn
 			self.nbTurn = self.nbTurn + 1
 			self.writeInFile(self.nbTurn, gameBoard, self.colorTurn)
@@ -30,7 +31,9 @@ class GameLogic:
 						listTurn.append(toRemove)
 						gameBoard[toRemove['x']][toRemove['y']] = Piece.NoPiece
 
-			return {'player':self.colorTurn, 'tile':{'x':x, 'y':y},'takenPieces':listTurn} #voir pour append and for pr piece rm
+			historicEntry = {'player':self.colorTurn, 'tile':{'x':x, 'y':y},'takenPieces':listTurn}
+			self.colorTurn = Piece.Black if self.colorTurn is Piece.White else Piece.White
+			return historicEntry
 		return None
 
 		#print content of gameboard inside file of folder name numero state + colorTurn at the begining
@@ -49,6 +52,12 @@ class GameLogic:
 				if not self.takePieces(gameBoard, x, y + i, traceback, opponentPiece):
 					return False
 		return True
+
+	def passTurn(self):
+		self.passCounts += 1
+		historicEntry = {'player':self.colorTurn,'passed':self.passCounts}
+		self.colorTurn = Piece.Black if self.colorTurn is Piece.White else Piece.White
+		return historicEntry, self.passCounts == 2
 
 	def writeInFile(self, nb, gameBoard, colorTurn):
 		f = open("state"+str(nb)+".txt", 'w+')

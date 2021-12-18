@@ -36,12 +36,19 @@ class HistoricWidget(QDockWidget):
 		"""
 		Add a new move to the historic
 		"""
-		self.historicListView.addItem(QListWidgetItem(self.buildHistoricEntry(play)))
+		if 'tile' in play:
+			self.historicListView.addItem(QListWidgetItem(self.buildPlayHistoricEntry(play)))
+		else:
+			self.historicListView.addItem(QListWidgetItem(self.buildPassedHistoricEntry(play)))
 
-	def buildHistoricEntry(self, play: dict):
-		historicEntry = 'Played in ' + chr(65 + play['tile']['x']) + str(play['tile']['y'] + 1)
+	def buildPlayHistoricEntry(self, play: dict):
+		historicEntry = 'Player '+str(play['player'])+' played in ' + chr(65 + play['tile']['x']) + str(play['tile']['y'] + 1)
 		if len(play['takenPieces']) > 0:
 			historicEntry += '\nThe following pieces have been removed:'
 			for i in range(0,len(play['takenPieces'])):
 				historicEntry += '\n   - ' + chr(65 + play['takenPieces'][i]['x']) + str(play['takenPieces'][i]['y'] + 1)
+		return historicEntry
+
+	def buildPassedHistoricEntry(self, play: dict):
+		historicEntry = 'Player '+str(play['player'])+' passed ('+str(play['passed'])+'/2 to end game)'
 		return historicEntry

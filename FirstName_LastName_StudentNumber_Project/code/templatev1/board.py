@@ -1,6 +1,6 @@
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QFrame
-from PyQt5.QtCore import Qt, QBasicTimer, pyqtSignal, QPoint, QRectF, QRect, QEvent
+from PyQt5.QtCore import Qt, QBasicTimer, pyqtSignal, QPoint, QRectF, QRect, QEvent, pyqtSlot
 from PyQt5.QtGui import QPainter, QPen, QBrush, QMouseEvent
 from piece import Piece
 from game_logic import GameLogic
@@ -39,8 +39,6 @@ class Board(QFrame):  # base the board on a QFrame widget
 			self.boardArray.append([])
 			for y in range(0, self.boardWidth):
 				self.boardArray[x].append(Piece.NoPiece)
-		self.boardArray[2][2] = Piece.Black
-		self.boardArray[1][2] = Piece.White
 		self.printBoardArray()
 
 	def printBoardArray(self):
@@ -159,3 +157,9 @@ class Board(QFrame):  # base the board on a QFrame widget
 						tileSize["y"]*row + radiusY + tileSize["y"]/2.0
 					)
 					painter.drawEllipse(center, radiusX*0.9, radiusY*0.9)
+
+	@pyqtSlot()
+	def passTurn(self):
+		historicEntry, gameOver = self.gameLogic.passTurn()
+		self.newMoveSignal.emit(historicEntry)
+		print(gameOver)
