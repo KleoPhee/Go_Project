@@ -4,6 +4,7 @@ from board import Board
 
 class SettingsWidget(QDockWidget):
 	passTurnSignal = pyqtSignal()
+	resetGameSignal = pyqtSignal()
 
 	def __init__(self):
 		"""
@@ -28,6 +29,10 @@ class SettingsWidget(QDockWidget):
 		passTurnButton.clicked.connect(lambda: self.passTurnSignal.emit())
 		mainLayout.addWidget(passTurnButton)
 
+		resetGameButton = QPushButton('Reset Game')
+		resetGameButton.clicked.connect(lambda: self.resetGameSignal.emit())
+		mainLayout.addWidget(resetGameButton)
+
 		mainLayout.setAlignment(Qt.AlignTop)
 		mainWidget.setLayout(mainLayout)
 		self.setWidget(mainWidget)
@@ -49,6 +54,7 @@ class SettingsWidget(QDockWidget):
 
 	def make_connection(self, board: Board):
 		self.passTurnSignal.connect(board.passTurn)
+		self.resetGameSignal.connect(board.resetGame)
 
 	@pyqtSlot()
 	def gameStarted(self):

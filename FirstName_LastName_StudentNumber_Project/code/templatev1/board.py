@@ -1,5 +1,5 @@
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QFrame, QDialog
+from PyQt5.QtWidgets import QFrame, QDialog, QLabel, QPushButton
 from PyQt5.QtCore import Qt, QBasicTimer, pyqtSignal, QPoint, QRectF, QRect, QEvent, pyqtSlot
 from PyQt5.QtGui import QPainter, QPen, QBrush, QMouseEvent
 from piece import Piece
@@ -14,8 +14,7 @@ class Board(QFrame):  # base the board on a QFrame widget
 	isStarted: bool
 	boardArray: list
 
-	# TODO set the board width and height to be square
-	boardWidth  = 7     # board is 0 squares wide # TODO default and personalized board size
+	boardWidth  = 7     # board is 0 squares wide
 	boardHeight = 7     #
 	timerSpeed  = 1     # the timer updates ever 1 second
 	counter     = 10    # the number the counter will count down from
@@ -71,7 +70,6 @@ class Board(QFrame):  # base the board on a QFrame widget
 
 	def timerEvent(self, event):
 		"""this event is automatically called when the timer is updated. based on the timerSpeed variable """
-		# TODO adapter this code to handle your timers
 		if event.timerId() == self.timer.timerId():  # if the timer that has 'ticked' is the one in this class
 			if Board.counter == 0:
 				print("Game over")
@@ -102,9 +100,10 @@ class Board(QFrame):  # base the board on a QFrame widget
 				self.newMoveSignal.emit(historyEntry)
 		self.update()
 
+	@pyqtSlot()
 	def resetGame(self):
 		"""clears pieces from the board"""
-		# TODO write code to reset game
+		pass
 
 	def tryMove(self, newX, newY):
 		"""tries to move a piece"""
@@ -164,5 +163,11 @@ class Board(QFrame):  # base the board on a QFrame widget
 		self.newMoveSignal.emit(historicEntry)
 		if gameOver:
 			end = QDialog(self)
+			end.setFixedSize(100,100)
+			win = QLabel("End Game", end)
+			reset = QPushButton("Reset",end)
+			reset.move(10, 50)
+			winner = QLabel("P1/P2", end)
+			winner.move(10, 25)
 			end.setWindowTitle("End of the GO game")
 			end.exec()

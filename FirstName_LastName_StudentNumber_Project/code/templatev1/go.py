@@ -84,6 +84,7 @@ class Go(QMainWindow):
 		currentState = self.settingsViewAction.isIconVisibleInMenu()
 		self.settingsViewAction.setIconVisibleInMenu(not currentState)
 		self.settingsWidget.hide() if currentState else self.settingsWidget.show()
+
 	def toggleHistoric(self):
 		currentState = self.historicViewAction.isIconVisibleInMenu()
 		self.historicViewAction.setIconVisibleInMenu(not currentState)

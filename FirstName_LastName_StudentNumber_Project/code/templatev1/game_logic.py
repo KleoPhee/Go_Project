@@ -64,7 +64,6 @@ class GameLogic:
 		f.write("Color turn:" + str(colorTurn) + "\nBoard:\n" + '\n'.join(['\t'.join([str(cell) for cell in row]) for row in gameBoard]))
 		f.close()
 
-	# TODO 1. Suicide Rule: You cannot place a stone which will immediately have no liberties.
 	def checkLiberties(self, gameBoard, x, y):
 		if gameBoard[x][y] != Piece.NoPiece:
 			return False
@@ -79,7 +78,6 @@ class GameLogic:
 				return True
 		return False
 
-	# TODO 2. KO Rule (Eternity Rule):
 	def KoRule(self):
 		return
 
@@ -101,20 +99,6 @@ class GameLogic:
 		count = {}
 		for file in os.listdir(folder):
 			folder.parseFile(file, count)
-
-	# TODO sois fct avec le switch sois dans boucle principale
-	# TODO add code here to manage the logic of your game
-
-	# TODO vérifier les regle selectionner et adapter le jeu
-	# movement black first white second
-
-	# Previous game states are not allowed. Keep a list of previous game states which must be
-	# checked before stones are placed
-	# techniquement peu pas les enlever préciser dans le help considerer comme aditionelle 10 marks
-	# TODO placer une piece a cote d'une autre peut être cocher
-
-	# TODO awarding points stones captured and territory controlled by a colour
-	# TODO A stone can be placed at any unoccupied and intersection of the board with limited exceptions
 
 	folder = "./" # keep a file can read and match with the current file
 	count = {}

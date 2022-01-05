@@ -1,8 +1,10 @@
-from PyQt5.QtWidgets import QDockWidget, QVBoxLayout, QWidget, QLabel #TODO import additional Widget classes as desired
+from PyQt5.QtWidgets import QDockWidget, QVBoxLayout, QWidget, QLabel
 from PyQt5.QtCore import pyqtSlot
 
 class ScoreBoard(QDockWidget):
 	'''# base the score_board on a QDockWidget'''
+
+	takenPieces: list
 
 	def __init__(self):
 		super().__init__()
@@ -16,6 +18,7 @@ class ScoreBoard(QDockWidget):
 		#create a widget to hold other widgets
 		self.mainWidget = QWidget()
 		self.mainLayout = QVBoxLayout()
+		self.takenPieces = [QLabel(), QLabel()]
 
 		#create two labels which will be updated by signals
 		self.label_clickLocation = QLabel("Click Location: ")
@@ -24,6 +27,7 @@ class ScoreBoard(QDockWidget):
 		self.mainLayout.addWidget(self.label_clickLocation)
 		self.mainLayout.addWidget(self.label_timeRemaining)
 		self.setWidget(self.mainWidget)
+
 
 	def center(self):
 		'''centers the window on the screen, you do not need to implement this method'''
@@ -34,6 +38,18 @@ class ScoreBoard(QDockWidget):
 		board.clickLocationSignal.connect(self.setClickLocation)
 		# when the updateTimerSignal is emitted in the board the setTimeRemaining slot receives it
 		board.updateTimerSignal.connect(self.setTimeRemaining)
+		# update the number of taken pieces by players
+		board.updateTakenPieces.connect(self.updateTakenPieces)
+		# update player turn
+		board.updatePlayerTurn.connect(self.updatePlayerTurn)
+
+	@pyqtSlot(dict)
+	def updateTakenPieces(self, board):
+		pass
+
+	@pyqtSlot(dict)
+	def updatePlayerTurn(self, board):
+		pass
 
 	@pyqtSlot(str) # checks to make sure that the following slot is receiving an argument of the type 'int'
 	def setClickLocation(self, clickLoc):
@@ -48,4 +64,3 @@ class ScoreBoard(QDockWidget):
 		self.label_timeRemaining.setText(update)
 		#print('slot '+update)
 		# self.redraw()
-

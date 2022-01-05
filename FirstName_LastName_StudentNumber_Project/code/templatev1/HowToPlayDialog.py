@@ -25,14 +25,12 @@ class HowToPlayDialog(QDialog):
 
 	def initManual(self):
 		self.manual = [
-			{'chapter':'About Go !','description':'Go is an abstract strategy board game invented in China more than 2,500 years ago. It confronts two players with the aim to surround more territory than the opponent.','image':'./assets/icons/Go.png'},
-			{'chapter':'How to play ?','description':'How to play description','image':''},
-			{'chapter':'How to play ?','description':'You can place a stone by clicking an intersection of the board grid','image':''},
-			{'chapter':'How to play ?','description':'How to play description','image':''},
-			{'chapter':'How to play ?','description':'How to play description','image':''},
-			{'chapter':'How to play ?','description':'How to play description','image':''},
-			{'chapter':'How to play ?','description':'How to play description','image':''},
-			{'chapter':'How to play ?','description':'How to play description','image':''},
+			{'chapter':'About Go !','description':'Go is an abstract strategy board game invented in China more than 2,500 years ago. It confronts two players with the aim to surround more territory than the opponent.','image':'./assets/icons/goBoard.jpg'},
+			{'chapter':'How to play ?','description':'The goal of the game is to surround the largest areas. Stones are caputured and not moved during the game once set on the board.','image':'./assets/icons/Go_game.png'},
+			{'chapter':'Place a stone ?','description':'You can place a stone by clicking an intersection of the board grid','image':'./assets/icons/Capture_stone.png'},
+			{'chapter': 'Suicide Rule ?', 'description': 'You cannot place a stone which will immediately have no liberties. A liberty is a free intersections surrounding a stone. ', 'image':'./assets/icons/suicide_rule.png'},
+			{'chapter':'KO rule ?','description':'To prevent endlessly re-capturing the same space, the "Ko rule" prevents the player to immediately recapturing the same position.','image':'./assets/icons/KO_rule.png'},
+			{'chapter':'End of game ?','description':'If both players pass their turns the game end.','image':'./assets/icons/end_game.png'},
 		]
 		# Following lines are a code sample if we are willing to implement .gif display
 		#self.movie = QMovie("earth.gif")
