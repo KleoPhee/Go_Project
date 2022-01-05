@@ -26,11 +26,11 @@ class ScoreBoard(QDockWidget):
 		#create two labels which will be updated by signals
 		#self.label_clickLocation = QLabel("Click Location: ")
 		self.label_timeRemaining = QLabel("Time remaining: ")
-		self.label_playerTurn = QLabel("Player Turn: ")
-		self.label_takenPieces = QLabel("Taken pieces: ")
+		self.label_playerTurn = QLabel("Player 1 (black)")
+		self.label_takenPieces = QLabel("Player 1 (black) taken pieces: 0\nPlayer 2 (white) taken pieces: 0")
 		self.mainWidget.setLayout(self.mainLayout)
 		#self.mainLayout.addWidget(self.label_clickLocation)
-		self.mainLayout.addWidget(self.label_timeRemaining)
+		#self.mainLayout.addWidget(self.label_timeRemaining)
 		self.mainLayout.addWidget(self.label_playerTurn)
 		self.mainLayout.addWidget(self.label_takenPieces)
 		self.setWidget(self.mainWidget)
@@ -52,12 +52,9 @@ class ScoreBoard(QDockWidget):
 
 	@pyqtSlot(dict)
 	def updateTakenPieces(self, board):
-		if board['player'] is Piece.Black:
-			self.takenPieces[0] += len(board['takenPieces'])
-			self.label_takenPieces.setText(str(self.takenPieces[1]))
-		if board['player'] is Piece.White:
-			self.takenPieces[1] += len(board['takenPieces'])
-			self.label_takenPieces.setText(str(self.takenPieces[0]))
+		if "takenPieces" in board:
+			self.takenPieces[0 if board['player'] is Piece.Black else 1] += len(board['takenPieces'])
+		self.label_takenPieces.setText("Player 1 taken pieces: " + str(self.takenPieces[0]) + "\n" + "Player 2 taken pieces: " + str(self.takenPieces[1]))
 
 	@pyqtSlot(dict)
 	def updatePlayerTurn(self, board):
