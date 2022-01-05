@@ -1,6 +1,9 @@
 from PyQt5.QtWidgets import QDockWidget, QVBoxLayout, QWidget, QLabel
 from PyQt5.QtCore import pyqtSlot
 
+from FirstName_LastName_StudentNumber_Project.code.templatev1.piece import Piece
+
+
 class ScoreBoard(QDockWidget):
 	'''# base the score_board on a QDockWidget'''
 
@@ -18,14 +21,18 @@ class ScoreBoard(QDockWidget):
 		#create a widget to hold other widgets
 		self.mainWidget = QWidget()
 		self.mainLayout = QVBoxLayout()
-		self.takenPieces = [QLabel(), QLabel()]
+		self.takenPieces = [0, 0]
 
 		#create two labels which will be updated by signals
-		self.label_clickLocation = QLabel("Click Location: ")
+		#self.label_clickLocation = QLabel("Click Location: ")
 		self.label_timeRemaining = QLabel("Time remaining: ")
+		self.label_playerTurn = QLabel("Player Turn: ")
+		self.label_takenPieces = QLabel("Taken pieces: ")
 		self.mainWidget.setLayout(self.mainLayout)
-		self.mainLayout.addWidget(self.label_clickLocation)
+		#self.mainLayout.addWidget(self.label_clickLocation)
 		self.mainLayout.addWidget(self.label_timeRemaining)
+		self.mainLayout.addWidget(self.label_playerTurn)
+		self.mainLayout.addWidget(self.label_takenPieces)
 		self.setWidget(self.mainWidget)
 
 
@@ -39,17 +46,25 @@ class ScoreBoard(QDockWidget):
 		# when the updateTimerSignal is emitted in the board the setTimeRemaining slot receives it
 		board.updateTimerSignal.connect(self.setTimeRemaining)
 		# update the number of taken pieces by players
-		board.updateTakenPieces.connect(self.updateTakenPieces)
+		board.newMoveSignal.connect(self.updateTakenPieces)
 		# update player turn
-		board.updatePlayerTurn.connect(self.updatePlayerTurn)
+		board.newMoveSignal.connect(self.updatePlayerTurn)
 
 	@pyqtSlot(dict)
 	def updateTakenPieces(self, board):
-		pass
+		if board['player'] is Piece.Black:
+			self.takenPieces[0] += len(board['takenPieces'])
+			self.label_takenPieces.setText(str(self.takenPieces[1]))
+		if board['player'] is Piece.White:
+			self.takenPieces[1] += len(board['takenPieces'])
+			self.label_takenPieces.setText(str(self.takenPieces[0]))
 
 	@pyqtSlot(dict)
 	def updatePlayerTurn(self, board):
-		pass
+		if board['player'] is Piece.Black:
+			self.label_playerTurn.setText("Player 2 (white)")
+		if board['player'] is Piece.White:
+			self.label_playerTurn.setText("Player 1 (black)")
 
 	@pyqtSlot(str) # checks to make sure that the following slot is receiving an argument of the type 'int'
 	def setClickLocation(self, clickLoc):

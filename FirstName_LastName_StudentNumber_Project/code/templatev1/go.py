@@ -1,6 +1,8 @@
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow, QDesktopWidget, QMenu, QAction
 from PyQt5.QtCore import Qt
+
+from FirstName_LastName_StudentNumber_Project.code.templatev1.score_board import ScoreBoard
 from board import Board
 from SettingsWidget import SettingsWidget
 from HistoricWidget import HistoricWidget
@@ -14,18 +16,11 @@ class Go(QMainWindow):
 	historicWidget: HistoricWidget
 	settingsViewAction: QAction
 	settingsWidget: SettingsWidget
+	scoreBoard: ScoreBoard
 
 	def __init__(self):
 		super().__init__()
 		self.initUI()
-
-	"""
-	def getBoard(self):
-		return self.board
-
-	def getScoreBoard(self):
-		return self.scoreBoard
-	"""
 
 	def initMenu(self):
 		fileMenu = self.menuBar().addMenu(" File")
@@ -55,9 +50,13 @@ class Go(QMainWindow):
 		self.setCentralWidget(self.board)
 		self.historicWidget = HistoricWidget()
 		self.settingsWidget = SettingsWidget()
+		self.scoreBoard = ScoreBoard()
+
 		self.addDockWidget(Qt.LeftDockWidgetArea, self.settingsWidget)
 		self.addDockWidget(Qt.LeftDockWidgetArea, self.historicWidget)
+		self.addDockWidget(Qt.LeftDockWidgetArea, self.scoreBoard)
 		self.historicWidget.make_connection(self.board)
+		self.scoreBoard.make_connection(self.board)
 		self.settingsWidget.make_connection(self.board)
 
 		self.resize(800, 800)
