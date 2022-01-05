@@ -38,6 +38,7 @@ class SettingsWidget(QDockWidget):
 		self.setWidget(mainWidget)
 
 	def initBoardSizeController(self):
+		"""function to control board size"""
 		boardSizeControllerWidget = QWidget()
 		boardSizeLayout = QHBoxLayout()
 		boardSizeLabel = QLabel("Board size: ")
@@ -53,6 +54,7 @@ class SettingsWidget(QDockWidget):
 		return boardSizeControllerWidget
 
 	def make_connection(self, board: Board):
+		"""function to give pass and reset signal"""
 		self.passTurnSignal.connect(board.passTurn)
 		self.resetGameSignal.connect(board.resetGame)
 

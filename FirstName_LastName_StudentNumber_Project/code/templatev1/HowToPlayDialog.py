@@ -24,6 +24,10 @@ class HowToPlayDialog(QDialog):
 		self.setFixedSize(300,500)
 
 	def initManual(self):
+		"""
+		function to build the manual to print how to play menu
+		:return:
+		"""
 		self.manual = [
 			{'chapter':'About Go !','description':'Go is an abstract strategy board game invented in China more than 2,500 years ago. It confronts two players with the aim to surround more territory than the opponent.','image':'./assets/icons/goBoard.jpg'},
 			{'chapter':'How to play ?','description':'The goal of the game is to surround the largest areas. Stones are caputured and not moved during the game once set on the board.','image':'./assets/icons/Go_game.png'},
@@ -32,18 +36,22 @@ class HowToPlayDialog(QDialog):
 			{'chapter':'KO rule ?','description':'To prevent endlessly re-capturing the same space, the "Ko rule" prevents the player to immediately recapturing the same position.','image':'./assets/icons/KO_rule.png'},
 			{'chapter':'End of game ?','description':'If both players pass their turns the game end.','image':'./assets/icons/end_game.png'},
 		]
-		# Following lines are a code sample if we are willing to implement .gif display
-		#self.movie = QMovie("earth.gif")
-		#self.label.setMovie(self.movie)
-		#self.movie.start()
 
 	def initDialogWindow(self):
+		"""
+		function to set the how to play menu
+		:return:
+		"""
 		self.setWindowIcon(QIcon("./assets/icons/manual.png"))
 		self.setWindowTitle("How to play")
-		self.setWindowFlag(Qt.WindowContextHelpButtonHint, False) # remove '?' from window bar
-		self.setFixedSize(0,0) # fixe size to fit content
+		self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
+		self.setFixedSize(0,0)
 
 	def initLayout(self):
+		"""
+		function to initilaize the how to play menu
+		:return:
+		"""
 		self.chapterLabel = QLabel()
 		self.chapterLabel.setStyleSheet('font-weight:bold;font-size:22px;margin:10px')
 		self.chapterLabel.setAlignment(Qt.AlignCenter)
@@ -81,10 +89,12 @@ class HowToPlayDialog(QDialog):
 		self.setLayout(layout)
 
 	def navigate(self, to :int):
+		""" function to navigate in the how to play menu"""
 		self.index += to
 		self.updateUI()
 
 	def updateUI(self):
+		"""function to update the how to play depending of the index"""
 		self.prevButton.setDisabled(self.index == 0)
 		self.nextButton.setDisabled(self.index == len(self.manual)-1)
 		self.indexLabel.setText(str(self.index+1)+'/'+str(len(self.manual)))

@@ -23,9 +23,10 @@ class Go(QMainWindow):
 		self.initUI()
 
 	def initMenu(self):
-		fileMenu = self.menuBar().addMenu(" File")
-		fileMenu.setDisabled(True)
-
+		"""
+		Function to initialize the menu historic and settings
+		:return:
+		"""
 		viewMenu = self.menuBar().addMenu(" View")
 		self.settingsViewAction = QAction(QIcon("./assets/icons/ticked.png"), "Settings", self)
 		self.settingsViewAction.triggered.connect(self.toggleSettings)
@@ -88,4 +89,3 @@ class Go(QMainWindow):
 		currentState = self.historicViewAction.isIconVisibleInMenu()
 		self.historicViewAction.setIconVisibleInMenu(not currentState)
 		self.historicWidget.hide() if currentState else self.historicWidget.show()
-

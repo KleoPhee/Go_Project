@@ -42,16 +42,11 @@ class Board(QFrame):  # base the board on a QFrame widget
 
 	def printBoardArray(self):
 		"""prints the boardArray in an attractive way"""
-		print("boardArray:")
 		outline = ""
 		for x in range(0, len(self.boardArray)):
 			for y in range(0, len(self.boardArray[x])):
 				outline += str(self.boardArray[x][y])
 			outline += "\n"
-		#print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in self.boardArray]))
-
-	def mousePosToColRow(self, event):
-		"""convert the mouse click event to a row and column"""
 
 	def squareWidth(self):
 		"""returns the width of one square in the board"""
@@ -66,7 +61,6 @@ class Board(QFrame):  # base the board on a QFrame widget
 		self.isStarted = True                       # set the boolean which determines if the game has started to TRUE
 		self.resetGame()                            # reset the game
 		self.timer.start(self.timerSpeed, self)     # start the timer with the correct speed
-		print("start () - timer is started")
 
 	def timerEvent(self, event):
 		"""this event is automatically called when the timer is updated. based on the timerSpeed variable """
@@ -74,7 +68,6 @@ class Board(QFrame):  # base the board on a QFrame widget
 			if Board.counter == 0:
 				print("Game over")
 			self.counter -= 1
-			#print('timerEvent()', self.counter)
 			self.updateTimerSignal.emit(self.counter)
 		else:
 			super(Board, self).timerEvent(event)      # if we do not handle an event we should pass it to the super

@@ -3,13 +3,19 @@ import os
 from FirstName_LastName_StudentNumber_Project.code.templatev1.piece import Piece
 
 class GameLogic:
-	print("Game Logic Object Created")
 	colorTurn = Piece.Black
 	nbTurn = 0
 	listHistoric = []
 	passCounts = 0
 
 	def tryPlacePiece(self, gameBoard, x, y):
+		"""
+		function to place a piece inside the board
+		:param gameBoard:
+		:param x:
+		:param y:
+		:return:
+		"""
 		listTurn = []
 		if self.checkLiberties(gameBoard, x, y) is True:
 			self.passCounts = 0
@@ -36,9 +42,16 @@ class GameLogic:
 			return historicEntry
 		return None
 
-		#print content of gameboard inside file of folder name numero state + colorTurn at the begining
-
 	def takePieces(self, gameBoard, x, y, traceback, opponentPiece):
+		"""
+		function to remove a piece from the board
+		:param gameBoard:
+		:param x:
+		:param y:
+		:param traceback:
+		:param opponentPiece:
+		:return:
+		"""
 		if gameBoard[x][y] == Piece.NoPiece:
 			return False
 		if gameBoard[x][y] == self.colorTurn:
@@ -54,17 +67,35 @@ class GameLogic:
 		return True
 
 	def passTurn(self):
+		"""
+		function called when passing turn to get the historic of the board
+		:return:
+		"""
 		self.passCounts += 1
 		historicEntry = {'player':self.colorTurn,'passed':self.passCounts}
 		self.colorTurn = Piece.Black if self.colorTurn is Piece.White else Piece.White
 		return historicEntry, self.passCounts == 2
 
 	def writeInFile(self, nb, gameBoard, colorTurn):
+		"""
+		function to write in a file the current board state
+		:param nb:
+		:param gameBoard:
+		:param colorTurn:
+		:return:
+		"""
 		f = open("state"+str(nb)+".txt", 'w+')
 		f.write("Color turn:" + str(colorTurn) + "\nBoard:\n" + '\n'.join(['\t'.join([str(cell) for cell in row]) for row in gameBoard]))
 		f.close()
 
 	def checkLiberties(self, gameBoard, x, y):
+		"""
+		function to check the liberties of a piece
+		:param gameBoard:
+		:param x:
+		:param y:
+		:return:
+		"""
 		if gameBoard[x][y] != Piece.NoPiece:
 			return False
 		else:
@@ -81,9 +112,12 @@ class GameLogic:
 	def KoRule(self):
 		return
 
-# count the number of black and white tiles
-
 	def parseFile(file, count):
+		"""
+		function to parse a file to get current state
+		:param count:
+		:return:
+		"""
 		with open(file) as f:
 			lines = f.readlines()
 			for line in lines:
@@ -96,6 +130,10 @@ class GameLogic:
 						count[word][file] += 1
 
 	def parseFolder(folder):
+		"""
+		function to get content of folder
+		:return:
+		"""
 		count = {}
 		for file in os.listdir(folder):
 			folder.parseFile(file, count)

@@ -42,6 +42,11 @@ class HistoricWidget(QDockWidget):
 			self.historicListView.addItem(QListWidgetItem(self.buildPassedHistoricEntry(play)))
 
 	def buildPlayHistoricEntry(self, play: dict):
+		"""
+		function to build hitoric of a move
+		:param play:
+		:return:
+		"""
 		historicEntry = 'Player '+str(play['player'])+' played in ' + chr(65 + play['tile']['x']) + str(play['tile']['y'] + 1)
 		if len(play['takenPieces']) > 0:
 			historicEntry += '\nThe following pieces have been removed:'
@@ -50,5 +55,10 @@ class HistoricWidget(QDockWidget):
 		return historicEntry
 
 	def buildPassedHistoricEntry(self, play: dict):
+		"""
+		function to indicate the 2nd passing in the game
+		:param play:
+		:return:
+		"""
 		historicEntry = 'Player '+str(play['player'])+' passed ('+str(play['passed'])+'/2 to end game)'
 		return historicEntry
